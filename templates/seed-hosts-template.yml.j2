@@ -1,0 +1,60 @@
+---
+openshift_cluster_content:
+{% if _ar_os_seed_create_namespace %}
+- object: Projects
+  content:
+  - name: {{ ar_os_seed_namespace }} Project
+    template: "{{ _ar_os_seed_config_dest_templates }}/project-template.yml"
+    action: create
+    params_from_vars:
+      NAMESPACE: "{{ ar_os_seed_namespace }}"
+      NAMESPACE_DISPLAY_NAME: "{{ ar_os_seed_namespace | upper }}"
+    tags:
+    - projects
+{% endif %}
+
+{% if ar_os_seed_serviceaccounts is defined and ar_os_seed_serviceaccounts is not none %}
+{% set serviceaccounts = ar_os_seed_serviceaccounts | merge_list_of_dicts({'namespace': ar_os_seed_namespace}) %}
+- object: Service Accounts for {{ deployment_phase | upper }}
+  content:
+{% for serviceaccount in ar_os_seed_serviceaccounts %}
+  - name: {{ serviceaccount.name }}-serviceaccount
+    namespace: "{{ ar_os_seed_namespace }}"
+    template: "{{ _ar_os_seed_config_dest_templates }}/serviceaccount-template.yml"
+    action: apply
+    params_from_vars:
+      SA_NAME: {{ serviceaccount.name }}
+      SA_NAMESPACE: {{ ar_os_seed_namespace }}
+    tags:
+    - projects
+    - serviceaccounts
+{% endfor %}
+    post_steps:
+      - role: ar_os_scc_binding
+        vars:
+          tmp_dep_dir: {{ playbook_dir}}/../roles/
+          ar_os_scc_binding_items: {{ ar_os_seed_serviceaccounts | to_json }}
+          ar_os_scc_binding_namespace: {{ ar_os_seed_namespace }}
+      - role: ar_os_secret_link
+        vars:
+          tmp_dep_dir: {{ playbook_dir}}/../roles/
+          ar_os_secret_link_items: {{ ar_os_seed_serviceaccounts | to_json }}
+          ar_os_secret_link_namespace: {{ ar_os_seed_namespace }}
+{% endif %}
+
+- object: Deployments {{ deployment_phase | upper }}
+  content:
+# Openshift Content
+{% for content in ar_os_seed_openshift_content %}
+  - name: "{{ content['name'] }}"
+    namespace: "{{ ar_os_seed_namespace }}"
+    template: "{{ content['template'] }}"
+    action: apply
+{% if 'params' in content %}
+    params_from_vars:
+{% set keys = content['params'].keys() %}
+{% for key in keys %}
+      {{ key }}: "{{ content['params'][key] }}"
+{% endfor %}
+{% endif %}
+{% endfor %}

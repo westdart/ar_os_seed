@@ -1,0 +1,17 @@
+---
+- name: "Assert ..."
+  assert:
+    that:
+      - "ar_os_seed_openshift_login_url is not none"
+    msg: "Must include required parameters: ar_os_seed_openshift_login_url"
+
+- name: Login to OpenShift
+  include_role:
+    name: ar_os_common
+    tasks_from: login
+  vars:
+    ar_os_common_openshift_login_url: "{{ ar_os_seed_openshift_login_url }}"
+
+- name: Include openshift-applier role
+  include_role:
+    name: roles/openshift-applier/roles/openshift-applier
