@@ -11,19 +11,24 @@ openshift_cluster_content:
       NAMESPACE_DISPLAY_NAME: "{{ ar_os_seed_namespace | upper }}"
     tags:
     - projects
+    post_steps:
+      - role: ar_os_registry_secret
+        vars:
+          tmp_dep_dir: {{ playbook_dir}}/../roles/
+          ar_os_registry_secret_items: {{ ar_os_seed_registry_secrets | to_json }}
+          ar_os_registry_secret_namespace: {{ ar_os_seed_namespace }}
 {% endif %}
 
 {% if ar_os_seed_serviceaccounts is defined and ar_os_seed_serviceaccounts is not none %}
-{% set serviceaccounts = ar_os_seed_serviceaccounts | merge_list_of_dicts({'namespace': ar_os_seed_namespace}) %}
 - object: Service Accounts for {{ deployment_phase | upper }}
   content:
 {% for serviceaccount in ar_os_seed_serviceaccounts %}
-  - name: {{ serviceaccount.name }}-serviceaccount
+  - name: {{ serviceaccount.sa_name }}-serviceaccount
     namespace: "{{ ar_os_seed_namespace }}"
     template: "{{ _ar_os_seed_config_dest_templates }}/serviceaccount-template.yml"
     action: apply
     params_from_vars:
-      SA_NAME: {{ serviceaccount.name }}
+      SA_NAME: {{ serviceaccount.sa_name }}
       SA_NAMESPACE: {{ ar_os_seed_namespace }}
     tags:
     - projects

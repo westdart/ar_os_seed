@@ -1,0 +1,5 @@
+- name: Include tasks to create seed files
+  include_tasks: seed.yml
+
+- name: Include tasks to apply seed files
+  include_tasks: apply.yml

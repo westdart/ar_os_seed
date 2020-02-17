@@ -1,4 +1,7 @@
 ---
+ar_os_seed_registry_secrets: "{{ registry_secrets | default([]) }}"
+ar_os_seed_openshift_login_url: null
+
 _ar_os_seed_config_dest_inventory: "{{ ar_os_seed_config_dest }}/inventory"
 _ar_os_seed_config_dest_templates: "{{ ar_os_seed_config_dest }}/templates"
 _ar_os_seed_create_namespace: false
