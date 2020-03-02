@@ -14,7 +14,7 @@ openshift_cluster_content:
     post_steps:
       - role: ar_os_registry_secret
         vars:
-          tmp_dep_dir: {{ playbook_dir}}/../roles/
+          tmp_dep_dir: {{ playbook_dir}}/roles/
           ar_os_registry_secret_items: {{ ar_os_seed_registry_secrets | to_json }}
           ar_os_registry_secret_namespace: {{ ar_os_seed_namespace }}
 {% endif %}
@@ -37,12 +37,12 @@ openshift_cluster_content:
     post_steps:
       - role: ar_os_scc_binding
         vars:
-          tmp_dep_dir: {{ playbook_dir}}/../roles/
+          tmp_dep_dir: {{ playbook_dir}}/roles/
           ar_os_scc_binding_items: {{ ar_os_seed_serviceaccounts | to_json }}
           ar_os_scc_binding_namespace: {{ ar_os_seed_namespace }}
       - role: ar_os_secret_link
         vars:
-          tmp_dep_dir: {{ playbook_dir}}/../roles/
+          tmp_dep_dir: {{ playbook_dir}}/roles/
           ar_os_secret_link_items: {{ ar_os_seed_serviceaccounts | to_json }}
           ar_os_secret_link_namespace: {{ ar_os_seed_namespace }}
 {% endif %}
