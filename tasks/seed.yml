@@ -1,12 +1,7 @@
 ---
-- name: "Assert ..."
+- name: "Assertions: ar_os_seed (seed)"
   assert:
-    that:
-      - "ar_os_seed_openshift_content is not none"
-      - "ar_os_seed_namespace is not none"
-      - "ar_os_seed_config_dest is not none"
-      - "ar_os_seed_openshift_login_url is not none"
-    msg: "Must include required parameters: ar_os_seed_openshift_login_url, ar_os_seed_config_dest, ar_os_seed_openshift_content, ar_os_seed_namespace"
+    that: "{{ ar_os_seed_content_assertions }}"
 
 - name: Login to OpenShift
   include_role:

@@ -1,9 +1,7 @@
 ---
-- name: "Assert ..."
+- name: "Assertions: ar_os_seed (apply)"
   assert:
-    that:
-      - "ar_os_seed_openshift_login_url is not none"
-    msg: "Must include required parameters: ar_os_seed_openshift_login_url"
+    that: "{{ ar_os_seed_apply_assertions }}"
 
 - name: Login to OpenShift
   include_role:

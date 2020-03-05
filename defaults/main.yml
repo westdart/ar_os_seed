@@ -5,3 +5,26 @@ ar_os_seed_openshift_login_url: null
 _ar_os_seed_config_dest_inventory: "{{ ar_os_seed_config_dest }}/inventory"
 _ar_os_seed_config_dest_templates: "{{ ar_os_seed_config_dest }}/templates"
 _ar_os_seed_create_namespace: false
+
+  "ar_os_secret_link_namespace is defined",
+  "ar_os_secret_link_namespace is not none",
+  "ar_os_secret_link_namespace | length",
+
+ar_os_seed_apply_assertions:
+  - "ar_os_seed_openshift_login_url is defined"
+  - "ar_os_seed_openshift_login_url is not none"
+  - "ar_os_seed_openshift_login_url | length"
+
+ar_os_seed_content_assertions:
+  - "ar_os_seed_openshift_content is defined"
+  - "ar_os_seed_openshift_content is not none"
+  - "ar_os_seed_openshift_content | length"
+  - "ar_os_seed_namespace is defined"
+  - "ar_os_seed_namespace is not none"
+  - "ar_os_seed_namespace | length"
+  - "ar_os_seed_config_dest is defined"
+  - "ar_os_seed_config_dest is not none"
+  - "ar_os_seed_config_dest | length"
+  - "ar_os_seed_openshift_login_url is defined"
+  - "ar_os_seed_openshift_login_url is not none"
+  - "ar_os_seed_openshift_login_url | length"
