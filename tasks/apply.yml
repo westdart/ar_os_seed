@@ -1,4 +1,8 @@
 ---
+- name: Load seeding vars
+  include_vars:
+    file: "{{ _ar_os_seed_config_dest_templates }}/seed-hosts.yml"
+
 - name: "Assertions: ar_os_seed (apply)"
   assert:
     that: "{{ ar_os_seed_apply_assertions }}"

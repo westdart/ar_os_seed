@@ -20,35 +20,7 @@
     _ar_os_seed_create_namespace: true
   when: project_present.rc != 0
 
-- name: Create inventory dirs
-  file:
-    path: "{{ _ar_os_seed_config_dest_inventory }}/group_vars"
-    state: directory
-
-- name: Create seed hosts inventory
-  template:
-    src: hosts.j2
-    dest: "{{ _ar_os_seed_config_dest_inventory }}/hosts"
-
-# Create the seed-hosts
-- name: Create seed hosts
+- name: Create seed vars
   template:
     src: seed-hosts-template.yml.j2
-    dest: "{{ _ar_os_seed_config_dest_inventory }}/group_vars/seed-hosts.yml"
-  with_items:
-    - "{{ app_target_instances }}"
-  loop_control:
-    loop_var: app_instance
-
-- name: Refresh inventory to ensure seed hosts changes picked up
-  meta: refresh_inventory
-
-- name: Clear facts to ensure seed hosts changes picked up
-  meta: clear_facts
-
-- name: reload facts
-  setup:
-
-- name: Load new group_vars
-  include_vars:
-    file: "{{ _ar_os_seed_config_dest_inventory }}/group_vars/seed-hosts.yml"
+    dest: "{{ _ar_os_seed_config_dest_templates }}/seed-hosts.yml"
